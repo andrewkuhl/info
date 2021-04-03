@@ -11,7 +11,7 @@ int main(){
             case 's':
                 return(0);
             case 'c':
-                data = INITIALIZE_LIST();
+                data = INITIALIZE_LIST(0);
                 break;
             case 'r':
             {
@@ -20,19 +20,18 @@ int main(){
                     std::cout << "Error: cannot open file for reading" << std::endl;
                     break;
                 }
-                data = INITIALIZE_LIST();
+                data = INITIALIZE_LIST(0);
                 string line;
                 getline(cin, line);
                 while (getline(cin, line)) {
                     getline(cin, line);
                     INFO *newInfo = INITIALIZE_INFO();
-                    newInfo->website = line.substr(line.find(' '), line.size());
+                    newInfo->website = line;
                     getline(cin, line);
-                    newInfo->username = line.substr(line.find(' '), line.size());
+                    newInfo->username = line;
                     getline(cin, line);
-                    newInfo->password = line.substr(line.find(' '), line.size());
+                    newInfo->password = line;
                     data = INSERT(data, newInfo);
-                    data->size++;
                 }
                 break;
             }
@@ -41,7 +40,7 @@ int main(){
                     std::cout << "[ERROR]: NULL LIST" << std::endl;
                     break;
                 } else {
-                    PRINT_INFO(data);
+                    PRINT_LIST(data);
                     break;
                 }
             case 'w':
@@ -77,25 +76,27 @@ int main(){
                 string websiteInput;
                 cin >> websiteInput;
                 DELETE(data, websiteInput);
-
+				break;
             }
-                break;
             case 'i':
             {
+            
+                cin.ignore();
                 INFO* insertedObject = INITIALIZE_INFO();
-                string insertInput;
+                string insertWebsite, insertUsername, insertPassword;
                 cout << "[ENTER WEBSITE]: ";
-                cin >> insertInput;
-                insertedObject->website = insertInput;
+                getline(cin, insertWebsite);
+                insertedObject->website = insertWebsite;;
                 cout << "[ENTER USERNAME]: ";
-                cin >> insertInput;
-                insertedObject->username = insertInput;
+                getline(cin, insertUsername);
+                insertedObject->username = insertUsername;
                 cout << "[ENTER PASSWORD]: ";
-                cin >> insertInput;
-                insertedObject->password = insertInput;
-                INSERT(data, insertedObject);
+                getline(cin, insertPassword);
+                insertedObject->password = insertPassword;
+                
+                data = INSERT(data, insertedObject);
+            	break;
             }
-                break;
             case 'x':
                 break;
         }

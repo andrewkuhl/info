@@ -1,17 +1,17 @@
 #include "info.h"
 
-LIST* INITIALIZE_LIST() {
+LIST* INITIALIZE_LIST(int size) {
 	LIST* data = (LIST*) calloc(1,sizeof(LIST));
-    data->size = 0;
-	data->list = (INFO**) calloc(1,sizeof(INFO*));
+    data->size = size;
+	data->list = (INFO**) calloc(size,sizeof(INFO*));
 	return data;
 }
 
 INFO* INITIALIZE_INFO() {
-    INFO* info = (INFO *) calloc(1, sizeof(INFO));
-    info->password = "";
-    info->username = "";
-    info->website = "";
+    INFO* info = (INFO*) calloc(1, sizeof(INFO));
+    info->password = "null";
+    info->username = "null";
+    info->website = "null";
     return info;
 }
 
@@ -19,10 +19,10 @@ void PRINT_LIST(LIST* data){
     std::cout <<"Size = " << data->size << std::endl;
     if(data->size != 0) {
         for (int i = 0; i < data->size; i++) {
-            std::cout << std::endl;
-            std::cout << "Website: " << data->list[i]->website << std::endl;
-            std::cout << "Username: " << data->list[i]->username << std::endl;
-            std::cout << "Password: " << data->list[i]->password << std::endl;
+            cout << endl;
+            cout << "\tWebsite: " << data->list[i]->website << endl;
+            cout << "\tUsername: " << data->list[i]->username << endl;
+            cout << "\tPassword: " << data->list[i]->password << endl;
         }
     }
 }
@@ -47,21 +47,19 @@ void DELETE(LIST* data, string selectedWebsite){
 }
 
 LIST* INSERT(LIST* data, INFO* newInfo){
-    LIST* newData = (LIST*) calloc(data->size+1,sizeof(LIST));
-    newData->size = data->size+1;
+    LIST* newData = INITIALIZE_LIST(data->size+1);  
+    if(data->size == 0){
+    cout << data->size+1 << endl;
+    cout << newData->size+1 << endl;
+    newData->list[0] = newInfo;
+    return newData;
+    }  
+    else{
     for(int i = 0; i < data->size; i++){
         newData->list[i] = data->list[i];
     }
-    newData->list[newData->size] = newInfo;
+    newData->list[newData->size-1] = newInfo;
+    delete data;
     return newData;
-}
-
-void PRINT_INFO(LIST* data){
-    cout << "Size: " << data->size << endl;
-    cout << endl;
-    for(int i = 0; i < data->size; i++){
-        cout << "Website: " << data->list[i]->website << endl;
-        cout << "Username: " << data->list[i]->username << endl;
-        cout << "Password: " << data->list[i]->password << endl;
     }
 }
